@@ -22,7 +22,7 @@ void Cache_List_Append(struct Cache_List *list, struct Cache_Block_Header *pbh)
 		Cache_List_Append(list->next,pbh);
 	else
 	{
-		struct Cache_List *nList = malloc(sizeof(struct Cache_List));
+		struct Cache_List *nList = Cache_List_Create();
 	
 		list->next = nList;
 	
@@ -39,7 +39,7 @@ void Cache_List_Prepend(struct Cache_List *list, struct Cache_Block_Header *pbh)
 		return Cache_List_Append(list->prev,pbh);
 	else
 	{
-		struct Cache_List *nList = malloc(sizeof(struct Cache_List));
+		struct Cache_List *nList = Cache_List_Create();
 	
 		list->prev = nList;
 	
