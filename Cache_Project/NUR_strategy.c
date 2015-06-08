@@ -40,9 +40,6 @@ struct Cache {
 *****/
 
 
-/*
- * TODO
- */ 
 void *Strategy_Create(struct Cache *pcache) 
 {
 	Strategy *strat = pcache->pstrategy;
@@ -51,20 +48,15 @@ void *Strategy_Create(struct Cache *pcache)
 	return NULL;
 }
 
-/*
- * TODO
- */ 
 void Strategy_Close(struct Cache *pcache)
 {
 	Strategy *strat = pcache->pstrategy;
 	free(strat);
 }
 
-/*
- * TODO
- */ 
 void Strategy_Invalidate(struct Cache *pcache)
 {
+	// Apparently nothing to do
 }
 
 /*
@@ -84,18 +76,16 @@ struct Cache_Block_Header *Strategy_Replace_Block(struct Cache *pcache)
 }
 
 
-/*
- * TODO
- */ 
 void Strategy_Read(struct Cache *pcache, struct Cache_Block_Header *pbh) 
 {
+	Strategy *strat = pcache->pstrategy;
+	strat->R = 1;
 }
 
-/*
- * TODO
- */  
 void Strategy_Write(struct Cache *pcache, struct Cache_Block_Header *pbh)
 {
+	Strategy *strat = pcache->pstrategy;
+	strat->M = 1;
 } 
 
 char *Strategy_Name()
