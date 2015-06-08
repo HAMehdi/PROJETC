@@ -1,10 +1,12 @@
+#include "low_cache.h"
 #include "cache.h"
 
 //! Création du cache.
 struct Cache *Cache_Create(const char *fic, unsigned nblocks, unsigned nrecords,
                            size_t recordsz, unsigned nderef)
 {
-	return NULL;
+	struct Cache cache = (struct Cache)malloc(sizeof(struct Cache));
+	return cache;
 }
 
 //! Fermeture (destruction) du cache.
