@@ -37,7 +37,7 @@ void Cache_List_Append(struct Cache_List *list, struct Cache_Block_Header *pbh)
 void Cache_List_Prepend(struct Cache_List *list, struct Cache_Block_Header *pbh)
 {
 	if( list->prev != NULL)
-		return Cache_List_Append(list->prev,pbh);
+		Cache_List_Append(list->prev,pbh);
 	else
 	{
 		struct Cache_List *nList = Cache_List_Create();
