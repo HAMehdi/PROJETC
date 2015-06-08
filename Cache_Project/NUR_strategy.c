@@ -1,7 +1,7 @@
 /*!
- * \file RAND_strategy.c
+ * \file NUR_strategy.c
  *
- * \brief  Stratégie de remplacement au hasard..
+ * \brief  Stratégie de remplacement NUR..
  * 
  * \author Groupe 15
  *

@@ -1,5 +1,5 @@
 /*!
- * \file FIFO_strategy.c
+ * \file LRU_strategy.c
  *
  * \brief  Stratégie de remplacement LRU..
  * 
