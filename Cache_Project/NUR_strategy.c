@@ -18,8 +18,6 @@
 
 
 typedef struct t_Strategy {
-	unsigned R:1; // 1 bit utilisé
-	unsigned M:1; // 1 bit utilisé
 	unsigned ndrf; // temps avant déréférençage
 } Strategy;
 
@@ -45,8 +43,10 @@ void *Strategy_Create(struct Cache *pcache)
 {
 	Strategy *strat = pcache->pstrategy;
 	strat = (*Strategy) malloc(sizeof(Strategy));
+
+	strat->ndrf = pcache->nderef;
 	
-	return NULL;
+	return strat;
 }
 
 void Strategy_Close(struct Cache *pcache)
@@ -100,7 +100,7 @@ void Strategy_Read(struct Cache *pcache, struct Cache_Block_Header *pbh)
 void Strategy_Write(struct Cache *pcache, struct Cache_Block_Header *pbh)
 {
 	Strategy *strat = pcache->pstrategy;
-	strat->M = 1;
+	pbh->flags[VALID] = 1;
 } 
 
 char *Strategy_Name()
