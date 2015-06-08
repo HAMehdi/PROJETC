@@ -20,6 +20,7 @@
 typedef struct t_Strategy {
 	unsigned R:1; // 1 bit utilisé
 	unsigned M:1; // 1 bit utilisé
+	unsigned ndrf; // temps avant déréférençage
 } Strategy;
 
 
@@ -56,7 +57,8 @@ void Strategy_Close(struct Cache *pcache)
 
 void Strategy_Invalidate(struct Cache *pcache)
 {
-	// Apparently nothing to do
+	Strategy *strat = pcache->pstrategy;
+	free(strat);
 }
 
 /*
@@ -64,15 +66,28 @@ void Strategy_Invalidate(struct Cache *pcache)
  */ 
 struct Cache_Block_Header *Strategy_Replace_Block(struct Cache *pcache) 
 {
-    int ib;
+    int ib, ibval = 4;
     struct Cache_Block_Header *pbh;
 
     /* On cherche d'abord un bloc invalide */
-    if ((pbh = Get_Free_Block(pcache)) != NULL) return pbh;
+    if ((pbh = Get_Free_Block(pcache)) != NULL)
+		return pbh;
 
-    /* Sinon on tire un numéro de bloc au hasard */
-    ib = RANDOM(0, pcache->nblocks);
-    return &pcache->headers[ib];
+    /* Sinon on cherche le bloc de valeur la plus faible (2R+M)
+     	en cas d'égalité, on gardera le premier bloc trouvé */ 
+	for(int i=0; i<pcache->nblocks; i++) {
+		Strategy *strat = headers[i]->pstrategy;
+		int val = (strat->R<<1) + strat->M;
+		if(val < ibval)
+		{
+			if(!val)
+				return &pcache->headers[i];
+			ib = i;
+			ibval = val;
+		}
+	}
+
+	return &pcache->headers[ib];
 }
 
 
@@ -90,5 +105,5 @@ void Strategy_Write(struct Cache *pcache, struct Cache_Block_Header *pbh)
 
 char *Strategy_Name()
 {
-    return "NUR";
+	return "NUR";
 }
