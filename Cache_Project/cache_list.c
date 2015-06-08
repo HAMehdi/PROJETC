@@ -12,7 +12,11 @@ struct Cache_List *Cache_List_Create()
 /*! Destruction d'une liste de blocs */
 void Cache_List_Delete(struct Cache_List *list)
 {
+<<<<<<< HEAD
 	
+=======
+	free(list->pheader);
+>>>>>>> f5fd88005aba9939176607f05b6bfa00f84542c6
 	free(list);
 }
 
@@ -23,7 +27,7 @@ void Cache_List_Append(struct Cache_List *list, struct Cache_Block_Header *pbh)
 		Cache_List_Append(list->next,pbh);
 	else
 	{
-		struct Cache_List *nList = malloc(sizeof(struct Cache_List));
+		struct Cache_List *nList = Cache_List_Create();
 	
 		list->next = nList;
 	
@@ -37,10 +41,10 @@ void Cache_List_Append(struct Cache_List *list, struct Cache_Block_Header *pbh)
 void Cache_List_Prepend(struct Cache_List *list, struct Cache_Block_Header *pbh)
 {
 	if( list->prev != NULL)
-		return Cache_List_Append(list->prev,pbh);
+		Cache_List_Append(list->prev,pbh);
 	else
 	{
-		struct Cache_List *nList = malloc(sizeof(struct Cache_List));
+		struct Cache_List *nList = Cache_List_Create();
 	
 		list->prev = nList;
 	
@@ -70,7 +74,7 @@ struct Cache_Block_Header *Cache_List_Remove_First(struct Cache_List *list)
 struct Cache_Block_Header *Cache_List_Remove_Last(struct Cache_List *list)
 {
 	if( list->next != NULL)
-		Cache_List_Remove_First(list->next);
+		return Cache_List_Remove_First(list->next);
 	else
 	{
 		struct Cache_Block_Header *header = list->pheader;
@@ -116,6 +120,7 @@ struct Cache_Block_Header *Cache_List_Remove(struct Cache_List *list,
 /*! Remise en l'état de liste vide */
 void Cache_List_Clear(struct Cache_List *list)
 {
+<<<<<<< HEAD
 	list = Cache_List_Last(list);
 	
 	//je remonte dans ma liste en supprimant le dernier bloc
@@ -127,6 +132,9 @@ void Cache_List_Clear(struct Cache_List *list)
 	}
 	//quand tous les precedent sont free, on doit free le dernier(et premier) element
 	Cache_List_Delete(list);
+=======
+	
+>>>>>>> f5fd88005aba9939176607f05b6bfa00f84542c6
 }
 
 /*! Test de liste vide */
