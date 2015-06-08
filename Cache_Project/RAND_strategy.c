@@ -26,7 +26,6 @@ void *Strategy_Create(struct Cache *pcache)
 {
     // srand((unsigned int)time(NULL));
     return NULL;
-
 }
 
 /*!
