@@ -12,6 +12,7 @@ struct Cache_List *Cache_List_Create()
 /*! Destruction d'une liste de blocs */
 void Cache_List_Delete(struct Cache_List *list)
 {
+	free(list->pheader);
 	free(list);
 }
 
@@ -69,7 +70,7 @@ struct Cache_Block_Header *Cache_List_Remove_First(struct Cache_List *list)
 struct Cache_Block_Header *Cache_List_Remove_Last(struct Cache_List *list)
 {
 	if( list->next != NULL)
-		Cache_List_Remove_First(list->next);
+		return Cache_List_Remove_First(list->next);
 	else
 	{
 		struct Cache_Block_Header *header = list->pheader;
@@ -114,7 +115,7 @@ struct Cache_Block_Header *Cache_List_Remove(struct Cache_List *list,
 /*! Remise en l'état de liste vide */
 void Cache_List_Clear(struct Cache_List *list)
 {
-
+	
 }
 
 /*! Test de liste vide */
