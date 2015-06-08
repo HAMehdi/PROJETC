@@ -151,13 +151,42 @@ bool Cache_List_Is_Empty(struct Cache_List *list)
 void Cache_List_Move_To_End(struct Cache_List *list,
                             struct Cache_Block_Header *pbh)
 {
-
-	
+	if(list->prev != NULL)
+	{
+		struct Cache_List* pList = list->prev;
+		Cache_List_Remove(list,pbh);
+		Cache_List_Append(pList,pbh);
+	}
+	else if (list->next != NULL)
+	{
+		struct Cache_List* nList = list->next;
+		Cache_List_Remove(list,pbh);
+		Cache_List_Append(nList,pbh);
+	}
+	else
+	{
+		// On ne fait rien car ca veut dire que l'élement est seul dans la liste
+	}
 }
 
 /*! Transférer un élément  au début */
 void Cache_List_Move_To_Begin(struct Cache_List *list,
                               struct Cache_Block_Header *pbh)
 {
-
+	if(list->prev != NULL)
+	{
+		struct Cache_List* pList = list->prev;
+		Cache_List_Remove(list,pbh);
+		Cache_List_Prepend(pList,pbh);
+	}
+	else if (list->next != NULL)
+	{
+		struct Cache_List* nList = list->next;
+		Cache_List_Remove(list,pbh);
+		Cache_List_Prepend(nList,pbh);
+	}
+	else
+	{
+		// On ne fait rien car ca veut dire que l'élement est seul dans la liste
+	}
 }
