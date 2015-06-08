@@ -10,10 +10,7 @@ struct Cache_List *Cache_List_Create()
 /*! Destruction d'une liste de blocs */
 void Cache_List_Delete(struct Cache_List *list)
 {
-	free(list->pheader);
-
-	// TODO
-	// Est ce qu'on doit détruire la liste entière ou uniquement la liste donnée et joindre le next et le prev?
+	free(list);
 }
 
 /*! Insertion d'un élément à la fin */
@@ -59,7 +56,7 @@ struct Cache_Block_Header *Cache_List_Remove_First(struct Cache_List *list)
 	{
 		struct Cache_Block_Header *header = list->pheader;
 		list->next->prev = NULL;
-		free(list);
+		Cache_List_Delete(list);
 
 		return header;
 	}
@@ -75,7 +72,7 @@ struct Cache_Block_Header *Cache_List_Remove_Last(struct Cache_List *list)
 	{
 		struct Cache_Block_Header *header = list->pheader;
 		list->prev->next = NULL;
-		free(list);
+		Cache_List_Delete(list);
 
 		return header;
 	}
@@ -102,7 +99,7 @@ struct Cache_Block_Header *Cache_List_Remove(struct Cache_List *list,
 		list->next->prev = list->prev;
 		list->prev->next = list->next;
 
-		free(list);
+		Cache_List_Delete(list);
 
 		return header;
 	}
@@ -117,7 +114,10 @@ void Cache_List_Clear(struct Cache_List *list)
 /*! Test de liste vide */
 bool Cache_List_Is_Empty(struct Cache_List *list)
 {
-	return true;
+	if(list->next == NULL && list->prev == NULL && list->pheader == NULL)
+		return true;
+
+	return false;
 }
 
 /*! Transférer un élément à la fin */
@@ -125,6 +125,7 @@ void Cache_List_Move_To_End(struct Cache_List *list,
                             struct Cache_Block_Header *pbh)
 {
 
+	
 }
 
 /*! Transférer un élément  au début */
