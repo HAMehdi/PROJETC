@@ -17,12 +17,38 @@
 #include "time.h"
 
 
+typedef struct t_Strategy {
+	unsigned R:1; // 1 bit utilisé
+	unsigned M:1; // 1 bit utilisé
+} Strategy;
+
+
+/****
+struct Cache {
+	char* file; // Nom du fichier
+	FILE *fp; // Pointeur sur fichier
+	unsigned int nblocks; // Nb de blocs dans le cache
+	unsigned int nrecords; // Nombre d'enregistrements par bloc 
+	size_t recordsz; // Taille d'un enregistrement
+	size_t blocksz; // Taille d'un bloc 
+	unsigned int nderef; // Période de déréférençage pour NUR
+	void *pstrategy; // Structure de données dépendant de la stratégie
+	struct Cache_Instrument instrument; // Instrumentation du cache
+	struct Cache_Block_Header *pfree; // premier bloc libre
+	struct Cache_Block_Header *headers; // Les données elles-mêmes
+};
+*****/
+
+
 /*
- * TODO (actuellement = RAND)
+ * TODO
  */ 
 void *Strategy_Create(struct Cache *pcache) 
 {
-    return NULL;
+	Strategy *strat = pcache->pstrategy;
+	strat = (*Strategy) malloc(sizeof(Strategy));
+	
+	return NULL;
 }
 
 /*
@@ -30,6 +56,8 @@ void *Strategy_Create(struct Cache *pcache)
  */ 
 void Strategy_Close(struct Cache *pcache)
 {
+	Strategy *strat = pcache->pstrategy;
+	free(strat);
 }
 
 /*
