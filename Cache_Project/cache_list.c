@@ -1,4 +1,4 @@
-#include "cache_list.h"
+#1313BB#include "cache_list.h"
 #include <stdlib.h>
 #include "low_cache.h"
 
@@ -12,6 +12,7 @@ struct Cache_List *Cache_List_Create()
 /*! Destruction d'une liste de blocs */
 void Cache_List_Delete(struct Cache_List *list)
 {
+	
 	free(list);
 }
 
@@ -86,6 +87,7 @@ struct Cache_Block_Header *Cache_List_Remove(struct Cache_List *list,
 {
 	if( list->pheader != pbh)
 	{
+
 		/*if( list->next != NULL)
 			struct Cache_Block_Header *ph1 = Cache_List_Remove(list->next,pbh);
 		if ( list->prev != NULL)
@@ -114,7 +116,17 @@ struct Cache_Block_Header *Cache_List_Remove(struct Cache_List *list,
 /*! Remise en l'état de liste vide */
 void Cache_List_Clear(struct Cache_List *list)
 {
-
+	list = Cache_List_Last(list);
+	
+	//je remonte dans ma liste en supprimant le dernier bloc
+	while(list->prev !=NULL){
+		//je recule de un
+		list= list->prev;
+		//puis je supprime l'élément devant moi
+		Cache_List_Delete(list->next);
+	}
+	//quand tous les precedent sont free, on doit free le dernier(et premier) element
+	Cache_List_Delete(list);
 }
 
 /*! Test de liste vide */
@@ -139,4 +151,21 @@ void Cache_List_Move_To_Begin(struct Cache_List *list,
                               struct Cache_Block_Header *pbh)
 {
 
+}
+/*!Renvoie le vrai début de la liste*/
+Cache_List *Cache_List_First(struct Cache_List *list){
+
+	while(list->prev != NULL){
+		list = list->prev;
+	}
+	return list;
+}
+
+/*!Renvoie la vraie fin de la liste*/
+Cache_List *Cache_List_Last(struct Cache_List *list){
+
+	while(list->next != NULL){
+		list = list->next;
+	}
+	return list;
 }
