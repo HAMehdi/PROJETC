@@ -3,7 +3,7 @@
  *
  * \brief  Stratégie de remplacement LRU..
  * 
- * \author
+ * \author Mehdi
  *
  * $Id: LRU_strategy.c
  */
