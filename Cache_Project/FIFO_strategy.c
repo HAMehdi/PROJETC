@@ -3,7 +3,7 @@
  *
  * \brief  Stratégie de remplacement FIFO..
  * 
- * \author
+ * \author Lucas
  *
  * $Id: FIFO_strategy.c
  */
