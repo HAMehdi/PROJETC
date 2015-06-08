@@ -164,7 +164,9 @@ void Cache_List_Move_To_End(struct Cache_List *list,
 		Cache_List_Append(nList,pbh);
 	}
 	else
+	{
 		// On ne fait rien car ca veut dire que l'élement est seul dans la liste
+	}
 }
 
 /*! Transférer un élément  au début */
@@ -184,5 +186,7 @@ void Cache_List_Move_To_Begin(struct Cache_List *list,
 		Cache_List_Prepend(nList,pbh);
 	}
 	else
+	{
 		// On ne fait rien car ca veut dire que l'élement est seul dans la liste
+	}
 }
