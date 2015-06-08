@@ -1,10 +1,12 @@
 #include "cache_list.h"
+#include <stdlib.h>
+#include "low_cache.h"
 
 /*! Création d'une liste de blocs */
 struct Cache_List *Cache_List_Create()
 {
-	// TODO
-	return NULL;
+	struct Cache_List *nList = malloc(sizeof(struct Cache_List));
+	return nList;
 }
 
 /*! Destruction d'une liste de blocs */
@@ -34,7 +36,7 @@ void Cache_List_Append(struct Cache_List *list, struct Cache_Block_Header *pbh)
 void Cache_List_Prepend(struct Cache_List *list, struct Cache_Block_Header *pbh)
 {
 	if( list->prev != NULL)
-		Cache_List_Append(list->prev,pbh);
+		return Cache_List_Append(list->prev,pbh);
 	else
 	{
 		struct Cache_List *nList = malloc(sizeof(struct Cache_List));
@@ -51,7 +53,7 @@ void Cache_List_Prepend(struct Cache_List *list, struct Cache_Block_Header *pbh)
 struct Cache_Block_Header *Cache_List_Remove_First(struct Cache_List *list)
 {
 	if( list->prev != NULL)
-		Cache_List_Remove_First(list->prev);
+		return Cache_List_Remove_First(list->prev);
 	else
 	{
 		struct Cache_Block_Header *header = list->pheader;
@@ -82,18 +84,22 @@ struct Cache_Block_Header *Cache_List_Remove_Last(struct Cache_List *list)
 struct Cache_Block_Header *Cache_List_Remove(struct Cache_List *list,
                                              struct Cache_Block_Header *pbh)
 {
-	// TODO Voir le cas ou le header n'est pas du tout dans la liste
-
 	if( list->pheader != pbh)
 	{
-		if( list->next != NULL)
-			Cache_List_Remove(list->next,pbh);
+		/*if( list->next != NULL)
+			struct Cache_Block_Header *ph1 = Cache_List_Remove(list->next,pbh);
 		if ( list->prev != NULL)
-			Cache_List_Remove(list->prev,pbh);
+			struct Cache_Block_Header *ph2 =Cache_List_Remove(list->prev,pbh);
+		
+		if(*ph1 != NULL)
+			return ph1;
+		else if(*ph2 != NULL)
+			return ph2;
+		else */
+			return NULL;
 	}
 	else
 	{
-		struct Cache_List *nPrev = list->prev;
 		struct Cache_Block_Header *header = list->pheader;
 		
 		list->next->prev = list->prev;
