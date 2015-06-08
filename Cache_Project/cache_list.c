@@ -1,6 +1,24 @@
-#1313BB#include "cache_list.h"
+#include "cache_list.h"
 #include <stdlib.h>
 #include "low_cache.h"
+
+/*!Renvoie le vrai début de la liste*/
+struct Cache_List *Cache_List_First(struct Cache_List *list)
+{
+	while(list->prev != NULL){
+		list = list->prev;
+	}
+	return list;
+}
+
+/*!Renvoie la vraie fin de la liste*/
+struct Cache_List *Cache_List_Last(struct Cache_List *list)
+{
+	while(list->next != NULL){
+		list = list->next;
+	}
+	return list;
+}
 
 /*! Création d'une liste de blocs */
 struct Cache_List *Cache_List_Create()
@@ -12,11 +30,7 @@ struct Cache_List *Cache_List_Create()
 /*! Destruction d'une liste de blocs */
 void Cache_List_Delete(struct Cache_List *list)
 {
-<<<<<<< HEAD
-	
-=======
 	free(list->pheader);
->>>>>>> f5fd88005aba9939176607f05b6bfa00f84542c6
 	free(list);
 }
 
@@ -89,38 +103,27 @@ struct Cache_Block_Header *Cache_List_Remove_Last(struct Cache_List *list)
 struct Cache_Block_Header *Cache_List_Remove(struct Cache_List *list,
                                              struct Cache_Block_Header *pbh)
 {
-	if( list->pheader != pbh)
+	for(list = Cache_List_First(list); list->next != NULL; list = list->next)
 	{
+		if (list->pheader == pbh)
+		{
+			struct Cache_Block_Header *header = list->pheader;
+			
+			list->next->prev = list->prev;
+			list->prev->next = list->next;
 
-		/*if( list->next != NULL)
-			struct Cache_Block_Header *ph1 = Cache_List_Remove(list->next,pbh);
-		if ( list->prev != NULL)
-			struct Cache_Block_Header *ph2 =Cache_List_Remove(list->prev,pbh);
-		
-		if(*ph1 != NULL)
-			return ph1;
-		else if(*ph2 != NULL)
-			return ph2;
-		else */
-			return NULL;
+			Cache_List_Delete(list);
+
+			return header;
+		}
 	}
-	else
-	{
-		struct Cache_Block_Header *header = list->pheader;
-		
-		list->next->prev = list->prev;
-		list->prev->next = list->next;
-
-		Cache_List_Delete(list);
-
-		return header;
-	}
+	
+	return NULL;
 }
 
 /*! Remise en l'état de liste vide */
 void Cache_List_Clear(struct Cache_List *list)
 {
-<<<<<<< HEAD
 	list = Cache_List_Last(list);
 	
 	//je remonte dans ma liste en supprimant le dernier bloc
@@ -132,9 +135,7 @@ void Cache_List_Clear(struct Cache_List *list)
 	}
 	//quand tous les precedent sont free, on doit free le dernier(et premier) element
 	Cache_List_Delete(list);
-=======
-	
->>>>>>> f5fd88005aba9939176607f05b6bfa00f84542c6
+
 }
 
 /*! Test de liste vide */
@@ -159,21 +160,4 @@ void Cache_List_Move_To_Begin(struct Cache_List *list,
                               struct Cache_Block_Header *pbh)
 {
 
-}
-/*!Renvoie le vrai début de la liste*/
-Cache_List *Cache_List_First(struct Cache_List *list){
-
-	while(list->prev != NULL){
-		list = list->prev;
-	}
-	return list;
-}
-
-/*!Renvoie la vraie fin de la liste*/
-Cache_List *Cache_List_Last(struct Cache_List *list){
-
-	while(list->next != NULL){
-		list = list->next;
-	}
-	return list;
 }
