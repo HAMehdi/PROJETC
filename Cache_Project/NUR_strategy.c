@@ -62,14 +62,15 @@ static void deref(struct Cache *pcache)
 	Strategy *strat = pcache->pstrategy;
 
 	// décrémenter le compte à rebour avant déréférenciation, ne rien faire de plus s'il reste du temps
-	if (!(--(strat->tpsBfDrf)))
+	if (!(-- strat->tpsBfDrf))
 		return;
 
 	// Déréférencer chaque bloc
 	for (int i = 0; i < pcache->nblocks; i++)
-		pcache->headers[i].flags -= READ;
+		pcache->headers[i].flags &= ~READ; // Passer le flag R à 0
 
 	strat->tpsBfDrf = pcache->nderef;
+	pcache->instrument.n_deref ++; // pour les mesures
 }
 
 void Strategy_Invalidate(struct Cache *pcache)
@@ -116,7 +117,7 @@ void Strategy_Read(struct Cache *pcache, struct Cache_Block_Header *pbh)
 void Strategy_Write(struct Cache *pcache, struct Cache_Block_Header *pbh)
 {
 	deref(pcache);
-	pbh->flags |= MODIF; // Bit MODIF → 1
+	pbh->flags |= READ; // Bit READ → 1
 }
 
 char *Strategy_Name()
