@@ -18,7 +18,7 @@
 
 
 typedef struct t_Strategy {
-	unsigned ndrf; // temps avant déréférençage
+	unsigned tpsBfDrf; // temps avant déréférençage
 } Strategy;
 
 
@@ -42,9 +42,9 @@ struct Cache {
 void *Strategy_Create(struct Cache *pcache) 
 {
 	Strategy *strat = pcache->pstrategy;
-	strat = (*Strategy) malloc(sizeof(Strategy));
+	strat = malloc(sizeof(Strategy));
 
-	strat->ndrf = pcache->nderef;
+	strat->tpsBfDrf = pcache->nderef;
 	
 	return strat;
 }
@@ -74,9 +74,8 @@ struct Cache_Block_Header *Strategy_Replace_Block(struct Cache *pcache)
 	for(int i=0; i<pcache->nblocks; i++) {
 
 		struct Cache_Block_Header *pbhi = &pcache->headers[i];
-		
-		Strategy *strat = pbhi->pstrategy;
-		int val = (strat->R<<1) + strat->M; // Calcul 2R+M
+
+		int val = (pbhi->flags & READ?2:0) + (pbhi->flags & MODIF?1:0); // Calcul 2R+M
 		if(val < ibval)
 		{
 			if(!val) // val = 0, nous avons le (ou l'un des) meilleur(s) bloc(s), innutile de continuer
