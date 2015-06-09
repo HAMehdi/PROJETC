@@ -49,6 +49,16 @@ Cache_Error Cache_Close(struct Cache *pcache)
 //! Synchronisation du cache.
 Cache_Error Cache_Sync(struct Cache *pcache)
 {
+	//on regarde tous les headers du cache
+	for(int i = 0 ; i < length(pcache->headers);i++){
+		//si on trouve un bloc du cache qui est modifié, on écrit ce bloc dans le fichier
+		if(pcache->headers[i]->flags.MODIF == 1){
+			//on remet le flag à 0:
+			pcache->headers[i]->flags.MODIF = 0;
+			
+			
+		}
+	}
 	return NULL;
 }
 
