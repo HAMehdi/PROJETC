@@ -98,6 +98,21 @@ void Strategy_Write(struct Cache *pcache, struct Cache_Block_Header *pbh)
 	pbh->flags |= VALID;
 }
 
+static void deref(struct Cache *pcache)
+{
+	Strategy *strat = pcache->pstrategy;
+
+	// décrémenter le compte à rebour avant déréférenciation, ne rien faire de plus s'il reste du temps
+	if (--(strat->tpsBfDrf) > 0)
+		return;
+
+	// Déréférencer chaque bloc
+	for (int i = 0; i < pcache->nblocks; i++)
+		pcache->headers[i].flags -= READ;
+
+	strat->tpsBfDrf = pcache->nderef;
+}
+
 char *Strategy_Name()
 {
 	return "NUR";
