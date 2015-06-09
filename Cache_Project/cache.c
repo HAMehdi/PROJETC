@@ -1,6 +1,7 @@
 #include "low_cache.h"
 #include "cache.h"
 #include "strategy.h"
+#include <string.h>
 
 //! Création du cache.
 struct Cache *Cache_Create(const char *fic, unsigned nblocks, unsigned nrecords,
@@ -8,7 +9,9 @@ struct Cache *Cache_Create(const char *fic, unsigned nblocks, unsigned nrecords,
 {
 	struct Cache *cache = malloc(sizeof(struct Cache));
 	
-	cache->file = fic;
+	char* name;
+	strcpy(name,fic);
+	cache->file = name;
 	cache->fp = fopen(fic,"r+");
 	cache->nblocks = nblocks;
 	cache->nrecords = nrecords;
@@ -38,6 +41,8 @@ struct Cache *Cache_Create(const char *fic, unsigned nblocks, unsigned nrecords,
 //! Fermeture (destruction) du cache.
 Cache_Error Cache_Close(struct Cache *pcache)
 {
+	Strategy_Close(pcache);
+	
 	free(pcache->file);
 	free(pcache->fp);
 	free(pcache->pstrategy);
