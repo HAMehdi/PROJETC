@@ -1,5 +1,6 @@
 #include "low_cache.h"
 #include "cache.h"
+#include "strategy.h"
 
 //! Création du cache.
 struct Cache *Cache_Create(const char *fic, unsigned nblocks, unsigned nrecords,
@@ -12,9 +13,10 @@ struct Cache *Cache_Create(const char *fic, unsigned nblocks, unsigned nrecords,
 	cache->nblocks = nblocks;
 	cache->nrecords = nrecords;
 	cache->recordsz = recordsz;
-	// TODO cache->blocksz = 0; 
+		// La taille d'un bloc corresponds à la taille utilisable pour remplir le block( soit nrecords * recordsz)
+	cache->blocksz =  nrecords * recordsz; 
 	cache->nderef = nderef;
-	// TODO cache->pstrategy = NULL;
+	cache->pstrategy = Strategy_Create(cache);
 	
 	struct Cache_Instrument instrument = { 0, 0, 0, 0, 0 };
 	
@@ -28,13 +30,7 @@ struct Cache *Cache_Create(const char *fic, unsigned nblocks, unsigned nrecords,
 	
 	cache->pfree = pfree;
 	
-	struct Cache_Block_Header* headers = malloc(sizeof(struct Cache_Block_Header));
-	headers->flags = VALID;
-	headers->ibfile = 0;
-	headers->ibcache = 0;
-	headers->data = NULL;
-	
-	cache->headers = headers;
+	cache->headers = NULL;
 	
 	return cache;
 }
