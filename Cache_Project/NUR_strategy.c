@@ -110,13 +110,13 @@ struct Cache_Block_Header *Strategy_Replace_Block(struct Cache *pcache)
 void Strategy_Read(struct Cache *pcache, struct Cache_Block_Header *pbh) 
 {
 	deref(pcache);
-	pbh->flags |= READ;
+	pbh->flags |= READ; // Bit READ → 1
 }
 
 void Strategy_Write(struct Cache *pcache, struct Cache_Block_Header *pbh)
 {
 	deref(pcache);
-	pbh->flags |= VALID;
+	pbh->flags |= MODIF; // Bit MODIF → 1
 }
 
 char *Strategy_Name()
