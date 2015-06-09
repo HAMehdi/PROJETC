@@ -25,15 +25,6 @@ void *Strategy_Create(struct Cache *pcache)
     //Création de la liste
     list_cache = Cache_List_Create();
 
-    //Initialisation de la liste TODO Faut-il le faire ? Ou on laisse les bloques invalides
-    /*
-    int i;
-
-    for(i = 0 ; i < pcache->nblocks ; i++){
-        Cache_List_Append(list_cache,&pcache->headers[i]);
-    }
-    */
-
     return list_cache;
 }
 
