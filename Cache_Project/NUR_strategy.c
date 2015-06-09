@@ -55,9 +55,28 @@ void Strategy_Close(struct Cache *pcache)
 	free(strat);
 }
 
+
+
+static void deref(struct Cache *pcache)
+{
+	Strategy *strat = pcache->pstrategy;
+
+	// décrémenter le compte à rebour avant déréférenciation, ne rien faire de plus s'il reste du temps
+	if (!(--(strat->tpsBfDrf)))
+		return;
+
+	// Déréférencer chaque bloc
+	for (int i = 0; i < pcache->nblocks; i++)
+		pcache->headers[i].flags -= READ;
+
+	strat->tpsBfDrf = pcache->nderef;
+}
+
 void Strategy_Invalidate(struct Cache *pcache)
 {
-	// TODO
+	Strategy *strat = pcache->pstrategy;
+	strat->tpsBfDrf = 1; // sera décrémenté → 0
+	deref(pcache);
 }
 
 struct Cache_Block_Header *Strategy_Replace_Block(struct Cache *pcache) 
@@ -90,27 +109,14 @@ struct Cache_Block_Header *Strategy_Replace_Block(struct Cache *pcache)
 
 void Strategy_Read(struct Cache *pcache, struct Cache_Block_Header *pbh) 
 {
+	deref(pcache);
 	pbh->flags |= READ;
 }
 
 void Strategy_Write(struct Cache *pcache, struct Cache_Block_Header *pbh)
 {
+	deref(pcache);
 	pbh->flags |= VALID;
-}
-
-static void deref(struct Cache *pcache)
-{
-	Strategy *strat = pcache->pstrategy;
-
-	// décrémenter le compte à rebour avant déréférenciation, ne rien faire de plus s'il reste du temps
-	if (--(strat->tpsBfDrf) > 0)
-		return;
-
-	// Déréférencer chaque bloc
-	for (int i = 0; i < pcache->nblocks; i++)
-		pcache->headers[i].flags -= READ;
-
-	strat->tpsBfDrf = pcache->nderef;
 }
 
 char *Strategy_Name()
