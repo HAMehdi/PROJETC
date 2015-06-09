@@ -70,10 +70,13 @@ Cache_Error Cache_Sync(struct Cache *pcache)
 //! Invalidation du cache.
 Cache_Error Cache_Invalidate(struct Cache *pcache)
 {
-	for( struct Cache_Block_Header *header : headers)
+	for(int i=0; i< pcache->nblocks ;i++)
 	{
-		
+			// On Invalide tous les blocks
+		pcache->headers[i].flags &= ~VALID;
 	}
+	
+	Strategy_Invalidate(pcache);
 }
 
 //! Lecture  (à travers le cache).
@@ -92,6 +95,7 @@ Cache_Error Cache_Write(struct Cache *pcache, int irfile, const void *precord)
 //! Résultat de l'instrumentation.
 struct Cache_Instrument *Cache_Get_Instrument(struct Cache *pcache)
 {
+		// On commence par créer une copie de l'instrument
 	struct Cache_Instrument* nInstrument = malloc(sizeof(struct Cache_Instrument));
 	nInstrument->n_reads = pcache->instrument.n_reads;
 	nInstrument->n_hits = pcache->instrument.n_hits;
@@ -99,6 +103,7 @@ struct Cache_Instrument *Cache_Get_Instrument(struct Cache *pcache)
 	nInstrument->n_syncs = pcache->instrument.n_syncs;
 	nInstrument->n_writes = pcache->instrument.n_writes;
 	
+		// Puis on met toutes les variables de l'instrument courant à 0
 	pcache->instrument.n_reads = 0;
 	pcache->instrument.n_hits = 0;
 	pcache->instrument.n_deref = 0;
