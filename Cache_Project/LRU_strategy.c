@@ -33,6 +33,7 @@ void *Strategy_Create(struct Cache *pcache)
  */
 void Strategy_Close(struct Cache *pcache)
 {
+    Cache_List_Delete(LRU_LIST(pcache));
 }
 
 /*!
