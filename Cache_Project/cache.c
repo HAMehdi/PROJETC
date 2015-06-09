@@ -89,7 +89,12 @@ Cache_Error Cache_Write(struct Cache *pcache, int irfile, const void *precord)
 //! Résultat de l'instrumentation.
 struct Cache_Instrument *Cache_Get_Instrument(struct Cache *pcache)
 {
-	struct Cache_Instrument* nInstrument = &pcache->instrument;
+	struct Cache_Instrument* nInstrument = malloc(sizeof(struct Cache_Instrument));
+	nInstrument->n_reads = pcache->instrument.n_reads;
+	nInstrument->n_hits = pcache->instrument.n_hits;
+	nInstrument->n_deref = pcache->instrument.n_deref;
+	nInstrument->n_syncs = pcache->instrument.n_syncs;
+	nInstrument->n_writes = pcache->instrument.n_writes;
 	
 	pcache->instrument.n_reads = 0;
 	pcache->instrument.n_hits = 0;
