@@ -70,7 +70,10 @@ Cache_Error Cache_Sync(struct Cache *pcache)
 //! Invalidation du cache.
 Cache_Error Cache_Invalidate(struct Cache *pcache)
 {
-	return NULL;
+	for( struct Cache_Block_Header *header : headers)
+	{
+		
+	}
 }
 
 //! Lecture  (à travers le cache).
