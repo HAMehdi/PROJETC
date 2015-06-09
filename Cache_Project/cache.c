@@ -49,6 +49,9 @@ Cache_Error Cache_Close(struct Cache *pcache)
 	free(pcache->pfree);
 	free(pcache->headers);
 	free(pcache);
+	
+	Cache_Error ok = CACHE_OK;
+	return ok;
 }
 
 //! Synchronisation du cache.
@@ -64,7 +67,8 @@ Cache_Error Cache_Sync(struct Cache *pcache)
 			
 		}
 	}
-	return NULL;
+	Cache_Error ok = CACHE_KO;
+	return ok;
 }
 
 //! Invalidation du cache.
@@ -77,18 +81,23 @@ Cache_Error Cache_Invalidate(struct Cache *pcache)
 	}
 	
 	Strategy_Invalidate(pcache);
+	
+	Cache_Error ok = CACHE_OK;
+	return ok;
 }
 
 //! Lecture  (à travers le cache).
 Cache_Error Cache_Read(struct Cache *pcache, int irfile, void *precord)
 {
-	return NULL;
+	Cache_Error ok = CACHE_KO;
+	return ok;
 }
 
 //! Écriture (à travers le cache).
 Cache_Error Cache_Write(struct Cache *pcache, int irfile, const void *precord)
 {
-	return NULL;
+	Cache_Error ok = CACHE_KO;
+	return ok;
 }
 
 
