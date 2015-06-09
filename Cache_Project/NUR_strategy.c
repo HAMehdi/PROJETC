@@ -57,51 +57,47 @@ void Strategy_Close(struct Cache *pcache)
 
 void Strategy_Invalidate(struct Cache *pcache)
 {
-	Strategy *strat = pcache->pstrategy;
-	free(strat);
+	// TODO
 }
 
-/*
- * TODO (actuellement = RAND)
- */ 
 struct Cache_Block_Header *Strategy_Replace_Block(struct Cache *pcache) 
 {
-    int ib, ibval = 4;
-    struct Cache_Block_Header *pbh;
+	int ibval = 4;
+	struct Cache_Block_Header *pbh;
 
-    /* On cherche d'abord un bloc invalide */
-    if ((pbh = Get_Free_Block(pcache)) != NULL)
+	/* On cherche d'abord un bloc invalide */
+	if ((pbh = Get_Free_Block(pcache)) != NULL)
 		return pbh;
 
-    /* Sinon on cherche le bloc de valeur la plus faible (2R+M)
-     	en cas d'égalité, on gardera le premier bloc trouvé */ 
+	/* Sinon on cherche le bloc de valeur la plus faible (2R+M)
+		en cas d'égalité, on gardera le premier bloc trouvé */ 
 	for(int i=0; i<pcache->nblocks; i++) {
-		Strategy *strat = headers[i]->pstrategy;
-		int val = (strat->R<<1) + strat->M;
+
+		struct Cache_Block_Header *pbhi = &pcache->headers[i];
+		
+		Strategy *strat = pbhi->pstrategy;
+		int val = (strat->R<<1) + strat->M; // Calcul 2R+M
 		if(val < ibval)
 		{
-			if(!val)
-				return &pcache->headers[i];
-			ib = i;
-			ibval = val;
+			if(!val) // val = 0, nous avons le (ou l'un des) meilleur(s) bloc(s), innutile de continuer
+				break;
+			pbh = pbhi; // enregistrement car meilleur
+			ibval = val; // enregistrement de la valeur pour le comparer aux suivants
 		}
 	}
 
-	return &pcache->headers[ib];
+	return pbh;
 }
-
 
 void Strategy_Read(struct Cache *pcache, struct Cache_Block_Header *pbh) 
 {
-	Strategy *strat = pcache->pstrategy;
-	strat->R = 1;
+	pbh->flags |= READ;
 }
 
 void Strategy_Write(struct Cache *pcache, struct Cache_Block_Header *pbh)
 {
-	Strategy *strat = pcache->pstrategy;
-	pbh->flags[VALID] = 1;
-} 
+	pbh->flags |= VALID;
+}
 
 char *Strategy_Name()
 {
